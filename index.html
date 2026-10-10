@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ORACOL PRO — 2B: versioned registers for any database</title>
+<meta name="description" content="2B turns the registers of an existing database into versioned ones — full history with valid-from and valid-to dates — without rewriting the application.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f5f74'/%3E%3Ctext x='32' y='42' font-family='Segoe UI,Arial,sans-serif' font-size='28' font-weight='700' text-anchor='middle' fill='white'%3E2B%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-alt: #f4f7f8;
+    --text: #15232b;
+    --muted: #51636c;
+    --line: #dde5e8;
+    --accent: #0f5f74;
+    --accent-soft: #e3f0f3;
+    --max: 1080px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0f1619;
+      --bg-alt: #151f23;
+      --text: #e6eef1;
+      --muted: #9fb2ba;
+      --line: #263439;
+      --accent: #5fb7cc;
+      --accent-soft: #17303a;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg);
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  header .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .brand { font-weight: 700; letter-spacing: .08em; color: var(--text); text-decoration: none; }
+  nav a { margin-left: 22px; color: var(--muted); text-decoration: none; font-size: 15px; }
+  nav a:hover { color: var(--accent); }
+
+  section { padding: 72px 0; }
+  section.alt { background: var(--bg-alt); }
+  h1 { font-size: clamp(32px, 4.6vw, 50px); line-height: 1.15; margin: 10px 0 20px; letter-spacing: -.01em; }
+  h2 { font-size: clamp(25px, 3vw, 32px); line-height: 1.25; margin: 0 0 14px; }
+  h3 { font-size: 18px; margin: 0 0 6px; }
+  .eyebrow { color: var(--accent); font-weight: 600; font-size: 14px; letter-spacing: .1em; text-transform: uppercase; }
+  .lead { font-size: 20px; color: var(--muted); max-width: 760px; }
+  .intro { color: var(--muted); max-width: 720px; margin: 0 0 32px; }
+
+  .hero { padding: 96px 0 80px; }
+  .cta { margin-top: 32px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; padding: 12px 22px; border-radius: 8px; font-weight: 600;
+    text-decoration: none; border: 1px solid var(--accent);
+  }
+  .btn.primary { background: var(--accent); color: var(--bg); }
+  .btn.secondary { color: var(--accent); }
+
+  .grid { display: grid; gap: 20px; }
+  .grid.three { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .grid.four { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .card {
+    background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 22px 22px 18px;
+  }
+  section.alt .card { background: var(--bg); }
+  .card p { margin: 0; color: var(--muted); font-size: 16px; }
+
+  ol.steps { list-style: none; padding: 0; margin: 0; counter-reset: step; display: grid; gap: 14px; }
+  ol.steps li {
+    counter-increment: step; display: grid; grid-template-columns: 52px 1fr; gap: 16px; align-items: start;
+    border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; background: var(--bg);
+  }
+  ol.steps li::before {
+    content: counter(step); width: 40px; height: 40px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent); font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  ol.steps p { margin: 0; color: var(--muted); font-size: 16px; }
+
+  .stat .value { font-size: 34px; font-weight: 700; color: var(--accent); line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .stat .label { margin-top: 6px; color: var(--text); font-weight: 600; font-size: 15px; }
+  .stat .note { margin-top: 2px; color: var(--muted); font-size: 14px; }
+  .footnote { margin-top: 22px; color: var(--muted); font-size: 15px; max-width: 760px; }
+
+  .roadmap { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+  .phase { border-left: 3px solid var(--line); padding: 4px 0 4px 18px; }
+  .phase.done { border-left-color: var(--accent); }
+  .phase .when { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 600; }
+  .phase p { margin: 4px 0 0; color: var(--muted); font-size: 16px; }
+
+  .person { display: flex; gap: 20px; align-items: center; }
+  .avatar {
+    flex: 0 0 64px; height: 64px; border-radius: 50%; background: var(--accent-soft); color: var(--accent);
+    display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 22px;
+  }
+
+  .contact { font-size: 19px; }
+  footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: 14px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 640px) {
+    nav a { margin-left: 14px; font-size: 14px; }
+    nav a.hide-sm { display: none; }
+    section { padding: 56px 0; }
+    .hero { padding: 64px 0 56px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#top">ORACOL PRO</a>
+    <nav>
+      <a href="#how" class="hide-sm">How it works</a>
+      <a href="#pilot">Pilot</a>
+      <a href="#roadmap" class="hide-sm">Roadmap</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">2B &middot; working name</div>
+    <h1>Versioned registers for any database &mdash; without rewriting the application</h1>
+    <p class="lead">2B reads an existing database, finds its registers and the references between them, and rebuilds it so that every register keeps its full history. The application keeps working as before.</p>
+    <div class="cta">
+      <a class="btn primary" href="mailto:support@oracol.pro">Talk to us</a>
+      <a class="btn secondary" href="#pilot">See the pilot</a>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="problem">
+  <div class="wrap">
+    <h2>Every change overwrites the past</h2>
+    <p class="intro">Operational systems keep their dictionaries and registers &mdash; services, fees, districts, vehicles, applicants &mdash; as plain tables.</p>
+    <div class="grid three">
+      <div class="card">
+        <h3>Plain tables forget</h3>
+        <p>Each update replaces the previous state. The history that audits and disputes need is simply not stored.</p>
+      </div>
+      <div class="card">
+        <h3>No answer for &ldquo;as of&rdquo;</h3>
+        <p>Nobody can say what a record looked like on a given date, or which version a past transaction relied on.</p>
+      </div>
+      <div class="card">
+        <h3>Rewrites are not an option</h3>
+        <p>Rebuilding the application to keep history takes years; migrating by hand takes months for every system.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <h2>How 2B works</h2>
+    <p class="intro">A set of agents connects to the client&rsquo;s database, analyses its metadata and data, and builds a new database on a versioned-register architecture &mdash; with the data carried over and checked.</p>
+    <ol class="steps">
+      <li><div><h3>Analyse</h3><p>Reads tables, keys and references &mdash; declared and hidden. The source database is only read, never written.</p></div></li>
+      <li><div><h3>Ask</h3><p>Asks only what the data cannot tell, with the evidence, a recommendation and a confidence level. Every answer is stored with its author and date.</p></div></li>
+      <li><div><h3>Generate</h3><p>Builds a versioned model: every register keeps its history with valid-from and valid-to dates.</p></div></li>
+      <li><div><h3>Load and reconcile</h3><p>Loads the data in one pass and reconciles every column against the source.</p></div></li>
+      <li><div><h3>Keep working</h3><p>A compatibility layer exposes the same table and column names, so existing applications keep running.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="alt" id="pilot">
+  <div class="wrap">
+    <h2>Pilot on a government production database</h2>
+    <p class="intro">September 2026: a full run on the production database of a national government agency. The client is not named.</p>
+    <div class="grid four">
+      <div class="card stat"><div class="value">31.1 M</div><div class="label">rows in the source</div><div class="note">262 tables, 19.4 GB</div></div>
+      <div class="card stat"><div class="value">101</div><div class="label">registers found</div><div class="note">only 82 foreign keys were declared</div></div>
+      <div class="card stat"><div class="value">23.8 M</div><div class="label">items migrated</div><div class="note">2.3 M references re-pointed</div></div>
+      <div class="card stat"><div class="value">0</div><div class="label">mismatches</div><div class="note">1,660 columns reconciled</div></div>
+      <div class="card stat"><div class="value">41 min</div><div class="label">end to end</div><div class="note">on a laptop</div></div>
+      <div class="card stat"><div class="value">2 weeks</div><div class="label">first code to full pilot</div><div class="note">31 August &rarr; 13 September 2026</div></div>
+    </div>
+    <p class="footnote">2B also found 610 references without a target &mdash; every one of them is broken in the source as well. Problems in the data are reported, not hidden.</p>
+  </div>
+</section>
+
+<section id="principles">
+  <div class="wrap">
+    <h2>Design principles</h2>
+    <div class="grid four">
+      <div class="card"><h3>One time axis</h3><p>Application time only: valid-from and valid-to. Simple to query, simple to explain.</p></div>
+      <div class="card"><h3>Plain tables</h3><p>No proprietary storage format &mdash; the result is ordinary database tables.</p></div>
+      <div class="card"><h3>People decide</h3><p>Heuristics are hypotheses. Decisions are recorded and survive every rebuild and re-run.</p></div>
+      <div class="card"><h3>Every run journaled</h3><p>What was generated, executed and failed is written to the target database itself.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="roadmap">
+  <div class="wrap">
+    <h2>Roadmap</h2>
+    <div class="roadmap">
+      <div class="phase done"><div class="when">Done &middot; September 2026</div><h3>Alpha</h3><p>Analysis, model, DDL generation, load, reconciliation and the migration workbench; full pilot on SQL Server.</p></div>
+      <div class="phase"><div class="when">Next</div><h3>MVP</h3><p>Register management interface, write-through compatibility layer, versioning API, access rights.</p></div>
+      <div class="phase"><div class="when">Then</div><h3>v1</h3><p>PostgreSQL and Oracle behind the same interface; partitioning for large registers.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="team">
+  <div class="wrap">
+    <h2>Team</h2>
+    <div class="person">
+      <div class="avatar" aria-hidden="true">AB</div>
+      <div>
+        <h3>Anton Bukur</h3>
+        <p style="margin:0;color:var(--muted)">Founder &mdash; product and engineering. <a href="https://www.linkedin.com/in/anton-bukur/" rel="noopener">LinkedIn</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="contact">
+  <div class="wrap">
+    <h2>Contact</h2>
+    <p class="intro">Have a legacy database whose registers should keep their history? We would like to hear about it.</p>
+    <p class="contact"><a href="mailto:support@oracol.pro">support@oracol.pro</a></p>
+    <p style="color:var(--muted);margin:0">ORACOL PRO S.R.L. &middot; IDNO 1022600054129 &middot; Chi&#537;in&#259;u, Republic of Moldova</p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 ORACOL PRO S.R.L. &ldquo;2B&rdquo; is a working name.</span>
+    <span>No cookies, no tracking.</span>
+  </div>
+</footer>
+
+</body>
+</html>
