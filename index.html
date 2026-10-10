@@ -186,16 +186,17 @@
 <section class="alt" id="pilot">
   <div class="wrap">
     <h2>Pilot on a government production database</h2>
-    <p class="intro">September 2026: a full run on the production database of a national government agency. The client is not named.</p>
+    <p class="intro">September 2026: every register of the production database of a national government agency migrated and reconciled. The client is not named.</p>
     <div class="grid four">
       <div class="card stat"><div class="value">31.1 M</div><div class="label">rows in the source</div><div class="note">262 tables, 19.4 GB</div></div>
       <div class="card stat"><div class="value">101</div><div class="label">registers found</div><div class="note">only 82 foreign keys were declared</div></div>
-      <div class="card stat"><div class="value">23.8 M</div><div class="label">items migrated</div><div class="note">2.3 M references re-pointed</div></div>
+      <div class="card stat"><div class="value">23.8 M</div><div class="label">register records migrated</div><div class="note">2.3 M references re-pointed</div></div>
       <div class="card stat"><div class="value">0</div><div class="label">mismatches</div><div class="note">1,660 columns reconciled</div></div>
       <div class="card stat"><div class="value">41 min</div><div class="label">end to end</div><div class="note">on a laptop</div></div>
-      <div class="card stat"><div class="value">2 weeks</div><div class="label">first code to full pilot</div><div class="note">31 August &rarr; 13 September 2026</div></div>
+      <div class="card stat"><div class="value">2 weeks</div><div class="label">first code to pilot</div><div class="note">31 August &rarr; 13 September 2026</div></div>
     </div>
     <p class="footnote">2B also found 610 references without a target &mdash; every one of them is broken in the source as well. Problems in the data are reported, not hidden.</p>
+    <p class="footnote">October 2026: reproduced on the public Stack Overflow 2010 database &mdash; 19.3 M rows, 9 tables, no declared foreign keys. 2B proposed 9 references from column names and checked them against the data: 6 confirmed, 2 rejected because 12&ndash;20% of their values point to missing rows. All 5 registers (4.03 M records) migrated and reconciled with 0 mismatches. Data: <a href="https://archive.org/details/stackexchange" rel="noopener">Stack Exchange Data Dump</a>, CC BY-SA 3.0.</p>
   </div>
 </section>
 
