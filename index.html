@@ -127,7 +127,7 @@
     <a class="brand" href="#top">ORACOL PRO</a>
     <nav>
       <a href="#how" class="hide-sm">How it works</a>
-      <a href="#pilot">Pilot</a>
+      <a href="#pilot">Validation</a>
       <a href="#roadmap" class="hide-sm">Roadmap</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -143,7 +143,7 @@
     <p class="lead">2B reads an existing database, finds its registers and the references between them, and rebuilds it so that every register keeps its full history. The application keeps working as before.</p>
     <div class="cta">
       <a class="btn primary" href="mailto:info@oracol.pro">Talk to us</a>
-      <a class="btn secondary" href="#pilot">See the pilot</a>
+      <a class="btn secondary" href="#pilot">See the results</a>
     </div>
   </div>
 </section>
@@ -185,18 +185,18 @@
 
 <section class="alt" id="pilot">
   <div class="wrap">
-    <h2>Pilot on a government production database</h2>
-    <p class="intro">September 2026: every register of the production database of a national government agency migrated and reconciled. The client is not named.</p>
+    <h2>Validation on a public production database</h2>
+    <p class="intro">October 2026: every register of the public Stack Overflow 2010 database migrated and reconciled &mdash; real production data that anyone can download and check.</p>
     <div class="grid four">
-      <div class="card stat"><div class="value">31.1 M</div><div class="label">rows in the source</div><div class="note">262 tables, 19.4 GB</div></div>
-      <div class="card stat"><div class="value">101</div><div class="label">registers found</div><div class="note">only 82 foreign keys were declared</div></div>
-      <div class="card stat"><div class="value">23.8 M</div><div class="label">register records migrated</div><div class="note">2.3 M references re-pointed</div></div>
-      <div class="card stat"><div class="value">0</div><div class="label">mismatches</div><div class="note">1,660 columns reconciled</div></div>
-      <div class="card stat"><div class="value">41 min</div><div class="label">end to end</div><div class="note">on a laptop</div></div>
-      <div class="card stat"><div class="value">2 weeks</div><div class="label">first code to pilot</div><div class="note">31 August &rarr; 13 September 2026</div></div>
+      <div class="card stat"><div class="value">19.3 M</div><div class="label">rows in the source</div><div class="note">9 tables, no declared foreign keys</div></div>
+      <div class="card stat"><div class="value">9</div><div class="label">references proposed</div><div class="note">from column names; 6 confirmed by the data</div></div>
+      <div class="card stat"><div class="value">4.03 M</div><div class="label">register records migrated</div><div class="note">all 5 registers</div></div>
+      <div class="card stat"><div class="value">0</div><div class="label">mismatches</div><div class="note">33 columns and 5 row counts reconciled</div></div>
+      <div class="card stat"><div class="value">6.9 min</div><div class="label">load to reconciliation</div><div class="note">on a laptop</div></div>
+      <div class="card stat"><div class="value">2.5 weeks</div><div class="label">first code to alpha</div><div class="note">31 August &rarr; 17 September 2026</div></div>
     </div>
-    <p class="footnote">2B also found 610 references without a target &mdash; every one of them is broken in the source as well. Problems in the data are reported, not hidden.</p>
-    <p class="footnote">October 2026: reproduced on the public Stack Overflow 2010 database &mdash; 19.3 M rows, 9 tables, no declared foreign keys. 2B proposed 9 references from column names and checked them against the data: 6 confirmed, 2 rejected because 12&ndash;20% of their values point to missing rows. All 5 registers (4.03 M records) migrated and reconciled with 0 mismatches. Data: <a href="https://archive.org/details/stackexchange" rel="noopener">Stack Exchange Data Dump</a>, CC BY-SA 3.0.</p>
+    <p class="footnote">2 proposed references were rejected because 12&ndash;20% of their values point to rows missing from the 2010 extract. Problems in the data are reported, not hidden.</p>
+    <p class="footnote">Data: <a href="https://archive.org/details/stackexchange" rel="noopener">Stack Exchange Data Dump</a>, CC BY-SA 3.0.</p>
   </div>
 </section>
 
@@ -216,7 +216,7 @@
   <div class="wrap">
     <h2>Roadmap</h2>
     <div class="roadmap">
-      <div class="phase done"><div class="when">Done &middot; September 2026</div><h3>Alpha</h3><p>Analysis, model, DDL generation, load, reconciliation and the migration workbench; full pilot on SQL Server.</p></div>
+      <div class="phase done"><div class="when">Done &middot; September 2026</div><h3>Alpha</h3><p>Analysis, model, DDL generation, load, reconciliation and the migration workbench; validated on SQL Server production data.</p></div>
       <div class="phase"><div class="when">Next</div><h3>MVP</h3><p>Register management interface, write-through compatibility layer, versioning API, access rights.</p></div>
       <div class="phase"><div class="when">Then</div><h3>v1</h3><p>PostgreSQL and Oracle behind the same interface; partitioning for large registers.</p></div>
     </div>
